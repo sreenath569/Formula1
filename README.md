@@ -10,4 +10,4 @@ constructors.json - (onstructorId, constructorRef, name, nationality, url)
 
 drivers.json - ()
 
-results.json
+results.json - (resultId, raceId, driverId, constructorId, number, grid, position, positionText, positionOrder, points, laps, time, milliseconds, fastestLap, rank, fastestLapTime, fastestLapSpeed, statusId)
