@@ -2,7 +2,7 @@ from pyspark.sql.types import StructType, StructField, StringType, IntegerType
 from pyspark.sql.functions import current_timestamp
 
 # defining schema
-pitstops_schema = StructType([
+pit_stops_schema = StructType([
   StructField("raceId" IntegerType(), True),
   StructField("driverId" IntegerType(), True),
   StructField("stop" StringType(), True),
@@ -13,15 +13,15 @@ pitstops_schema = StructType([
 ])
 
 # create dataframe of data file multiline Json
-pitstops_df = spark.read.schema(pitstops_schema) \
+pit_stops_df = spark.read.schema(pit_stops_schema) \
                         .option("multiLine", True) \
                         .json("path")
 
-pitstops_final_df = pitstops_df.withColumnRenamed("raceId", "race_id") \
+pit_stops_final_df = pit_stops_df.withColumnRenamed("raceId", "race_id") \
                                .withColumnRenamed("driverId", "driver_id") \
                                .withColumn("ingestion_date", current_timestamp())
 
-pitstops_final_df.write.mode("overwrite").parquet("path")
+pit_stops_final_df.write.mode("overwrite").parquet("path")
 
                                                 
                                     
