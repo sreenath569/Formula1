@@ -28,13 +28,13 @@ races_df = spark.read.option("header", True) \
 
 races_with_timestamp_df = races_df.withColumn("race_timestamp", to_timestamp(concat(col("date"), lit(" "), col("time"), "yyyy-MM-dd HH:mm:ss")))
 
-races_selected_df = races_with_timestamp_df.select(col("raceId").alias("race_id"),col("year").alias("race_year"),col("round"),col("circuitId").alias("circuit_id"),col("name"),col("ingestion_date"),col("race_timestamp"))
+races_selected_df = races_with_timestamp_df.select(col("raceId").alias("race_id"),col("year").alias("race_year"),col("round"),col("circuitId").alias("circuit_id"),col("name"),col("race_timestamp"))
 
 races_selected_df = races_selected_df.withColumn("data_source", lit(v_data_source))
 
 races_final_df = add_ingestion_date(races_selected_df)
 
-races_final_df.write.mode("overwrite").parquet("f"{processed_folder_path}/races")
+races_final_df.write.mode("overwrite").partitionBy("race_year").parquet("f"{processed_folder_path}/races")
 
                                                 
                                     
