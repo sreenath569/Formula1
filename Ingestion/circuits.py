@@ -1,3 +1,5 @@
+%run "../includes/configuration"
+
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DoubleType
 from pyspark.sql.functions import current_timestamp, col
 
@@ -16,7 +18,7 @@ circuits_schema = StructType([
 
 # create dataframe of data file csv
 circuits_df = spark.read.schema(circuits_schema) \
-                        .csv("raw/circuits.csv")
+                        .csv(f"{raw_folder_path}/circuits.csv")
 
 circuits_selected_df = circuits_df.select(col("circuitId"),col("circuitRef"),col("name"),col("location"),col("country"),col("lat"),col("lng"),col("alt"))
 
@@ -28,7 +30,7 @@ circuits_renamed_df = circuits_df.withColumnRenamed("circuitId", "circuit_id") \
 
 circuits_final_df = circuits_renamed_df.withColumn("ingestion_date", current_timestamp())
 
-circuits_final_df.write.mode("overwrite").parquet("processed/circuits")
+circuits_final_df.write.mode("overwrite").parquet("f"{processed_folder_path}/circuits")
 
                                                 
                                     
