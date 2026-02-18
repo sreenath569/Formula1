@@ -1,7 +1,9 @@
 %run "../includes/configuration"
+  
+%run "../includes/common_functions"
 
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DoubleType
-from pyspark.sql.functions import current_timestamp, col
+from pyspark.sql.functions import col
 
 # defining schema
 circuits_schema = StructType([
@@ -28,7 +30,7 @@ circuits_renamed_df = circuits_df.withColumnRenamed("circuitId", "circuit_id") \
                                   .withColumnRenamed("lng", "longitude") \
                                   .withColumnRenamed("alt", "altitude")
 
-circuits_final_df = circuits_renamed_df.withColumn("ingestion_date", current_timestamp())
+circuits_final_df = add_ingestion_date(circuits_renamed_df)
 
 circuits_final_df.write.mode("overwrite").parquet("f"{processed_folder_path}/circuits")
 
