@@ -1,1 +1,34 @@
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DoubleType
+from pyspark.sql.functions import current_timestamp, col
 
+# defining schema
+circuits_schema = StructType([
+  StructField("circuitId" IntegerType(), False),
+  StructField("circuitRef" StringType(), True),
+  StructField("name" StringType(), True),
+  StructField("location" StringType(), True),
+  StructField("country" StringType(), True),
+  StructField("lat" DoubleType(), True),
+  StructField("lng" DoubleType(), True),
+  StructField("alt" IntegerType(), True),
+  StructField("url" StringType(), True)
+])
+
+# create dataframe of data file csv
+circuits_df = spark.read.schema(circuits_schema) \
+                        .csv("raw/circuits.csv")
+
+circuits_selected_df = circuits_df.select(col("circuitId"),col("circuitRef"),col("name"),col("location"),col("country"),col("lat"),col("lng"),col("alt"))
+
+circuits_renamed_df = circuits_df.withColumnRenamed("circuitId", "circuit_id") \
+                                  .withColumnRenamed("circuitRef", "circuit_ref") \
+                                  .withColumnRenamed("lat", "latitude") \
+                                  .withColumnRenamed("lng", "longitude") \
+                                  .withColumnRenamed("alt", "altitude")
+
+circuits_final_df = circuits_renamed_df.withColumn("ingestion_date", current_timestamp())
+
+circuits_final_df.write.mode("overwrite").parquet("processed/circuits")
+
+                                                
+                                    
