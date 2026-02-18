@@ -1,9 +1,13 @@
+
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get("p_data_source")
+
 %run "../includes/configuration"
   
 %run "../includes/common_functions"
 
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DoubleType
-from pyspark.sql.functions import col
+from pyspark.sql.functions import col, lit
 
 # defining schema
 circuits_schema = StructType([
@@ -28,7 +32,8 @@ circuits_renamed_df = circuits_df.withColumnRenamed("circuitId", "circuit_id") \
                                   .withColumnRenamed("circuitRef", "circuit_ref") \
                                   .withColumnRenamed("lat", "latitude") \
                                   .withColumnRenamed("lng", "longitude") \
-                                  .withColumnRenamed("alt", "altitude")
+                                  .withColumnRenamed("alt", "altitude") \
+                                  .withColumn("data_source", lit(v_data_source))
 
 circuits_final_df = add_ingestion_date(circuits_renamed_df)
 
