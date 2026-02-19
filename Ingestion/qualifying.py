@@ -1,3 +1,11 @@
+
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get("p_data_source")
+
+%run "../includes/configuration"
+  
+%run "../includes/common_functions"
+
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType
 from pyspark.sql.functions import current_timestamp
 
@@ -17,15 +25,17 @@ qualifying_schema = StructType([
 # create dataframe of data file multiline Json
 qualifying_df = spark.read.schema(qualifying_schema) \
                         .option("multiLine", True) \
-                        .json("raw/qualifying")
+                        .json(f"{raw_folder_path}/qualifying.json")
 
-qualifying_final_df = qualifying_df.withColumnRenamed("qualifyId", "qualify_id") \
+qualifying_renamed_df = qualifying_df.withColumnRenamed("qualifyId", "qualify_id") \
                                   .withColumnRenamed("raceId", "race_id") \
                                   .withColumnRenamed("driverId", "driver_id") \
                                   .withColumnRenamed("constructorId", "constructor_id") \
-                                  .withColumn("ingestion_date", current_timestamp())
+                                  .withColumn("data_source", lit(v_data_source))
 
-qualifying_final_df.write.mode("overwrite").parquet("processed/qualifying")
+qualifying_final_df = add_ingestion_date(qualifying_renamed_df)
+
+qualifying_final_df.write.mode("overwrite").parquet("f"{processed_folder_path}/qualifying")
 
                                                 
                                     
