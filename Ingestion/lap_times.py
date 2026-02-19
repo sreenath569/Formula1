@@ -24,7 +24,8 @@ lap_times_df = spark.read.schema(lap_times_schema) \
                         .csv(f"{raw_folder_path}/lap_times.csv")
 
 lap_times_renamed_df = lap_times_df.withColumnRenamed("raceId", "race_id") \
-                               .withColumnRenamed("driverId", "driver_id")
+                               .withColumnRenamed("driverId", "driver_id") \
+                               .withColumn("data_source", lit(v_data_source))
 
 lap_times_final_df = add_ingestion_date(lap_times_renamed_df)
 
