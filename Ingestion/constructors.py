@@ -26,5 +26,6 @@ constructors_final_df = add_ingestion_date(constructors_renamed_df)
 
 constructors_final_df.write.mode("overwrite").parquet("f"{processed_folder_path}/constructors")
 
+dbutils.notebook.exit("Success")
                                                 
                                     
