@@ -45,10 +45,11 @@ results_with_columns_df = results_df.withColumnRenamed("resultId", "result_id") 
 
 results_dropped_df = results_with_columns_df.drop(col("statusId"))
 
-
 results_final_df = add_ingestion_date(results_dropped_df)
 
 results_final_df.write.mode("overwrite").parquet("f"{processed_folder_path}/results")
+
+dbutils.notebook.exit("Success")
 
                                                 
                                     
