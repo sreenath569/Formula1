@@ -39,9 +39,6 @@ drivers_drop_df = drivers_with_columns_df.drop(col("url"))
 
 drivers_final_df = add_ingestion_date(drivers_drop_df)
 
-dbutils.notebook.exit("Success")
-
 drivers_final_df.write.mode("overwrite").parquet("f"{processed_folder_path}/drivers")
 
-                                                
-                                    
+dbutils.notebook.exit("Success")
