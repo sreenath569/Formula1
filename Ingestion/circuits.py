@@ -39,5 +39,7 @@ circuits_final_df = add_ingestion_date(circuits_renamed_df)
 
 circuits_final_df.write.mode("overwrite").parquet("f"{processed_folder_path}/circuits")
 
+dbutils.notebook.exit("Success")
+
                                                 
                                     
