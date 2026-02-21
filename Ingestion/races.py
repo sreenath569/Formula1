@@ -36,5 +36,7 @@ races_final_df = add_ingestion_date(races_selected_df)
 
 races_final_df.write.mode("overwrite").partitionBy("race_year").parquet("f"{processed_folder_path}/races")
 
+dbutils.notebook.exit("Success")
+
                                                 
                                     
