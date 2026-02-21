@@ -18,3 +18,6 @@ races_df = spark.read.parquet(f"{processed_folder_path}/races") \
 
 results_df = spark.read.parquet(f"{processed_folder_path}/results") \
                         .withColumnRenamed("time", "race_time")
+
+race_circuits_df = races_df.join(circuits_df, races_df.circuit_id==circuits_df.circuit_id, "inner") \
+                            .select(races_df.race_id,races_df.race_year,races_df.race_name,races_df.race_date,circuits_df.circuit_location)
