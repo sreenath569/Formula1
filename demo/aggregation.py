@@ -10,6 +10,9 @@ race_results_df.select(count("*"))show()
 # countDistinct
 race_results_df.select(countDistinct("race_name")).show()
 
+# sum
+race_results_df.select(sum("points")).show()
+
                        
 
 
