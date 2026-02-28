@@ -28,6 +28,17 @@ race_results_df.groupBy("driver_name") \
                 .agg(sum("points").alias("total_points"), countDistinct("race_name").alias("number_of_races")) \
                 .show()
 
+grouped_df = race_results_df.groupBy("race_year", "driver_name") \
+                .agg(sum("points").alias("total_points"), countDistinct("race_name").alias("number_of_races")) \
+                .show()
+
+# window functions
+from pyspark.sql.functions import desc
+from pyspark.sql.window import Window
+
+driverRankSpec = Window.partitionBy("race_year").orderBy(desc("total_points"))
+demo_grouped_df.withColumn("rank", rank().over(driverRankSpec)).show()
+
                        
 
 
