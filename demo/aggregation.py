@@ -4,4 +4,12 @@ from pyspark.sql.functions import count, countDistinct, sum
 
 race_results_df = spark.read.parquet(f"{presentation_folder_path}/race_results")
 
+# count
+race_results_df.select(count("*"))show()
+
+# countDistinct
+race_results_df.select(countDistinct("race_name")).show()
+
+                       
+
 
