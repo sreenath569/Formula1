@@ -18,6 +18,16 @@ race_results_df.select(sum("points"), countDistinct("race_name")) \
                 .withColumnRenamed("count(Distinct race_name)", "number_of_races") \
                 .show()
 
+# groupBy - only one aggregate function
+race_results_df.groupBy("driver_name") \
+                .sum("points") \
+                .show()
+
+# groupBy & agg
+race_results_df.groupBy("driver_name") \
+                .agg(sum("points").alias("total_points"), countDistinct("race_name").alias("number_of_races")) \
+                .show()
+
                        
 
 
